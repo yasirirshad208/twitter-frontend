@@ -1,0 +1,202 @@
+/* Hero Section */
+.hero-section {
+  position: relative;
+  height: 750px;
+  
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease;
+}
+.hero-styling{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+}
+  
+  .navbar-home {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+    z-index: 20;
+  }
+  
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 2rem 0;
+  }
+  .navbar-home-material{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 3rem;
+  }
+  
+  .navbar-logo {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .menu-icon{
+    display: none;
+  }
+  
+  .navbar-links ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+  }
+  
+  .navbar-links li {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 17px;
+    text-transform: capitalize!important;
+    color: rgba(255, 255, 255, 1);
+  }
+  .navbar-links li:hover {
+    color: var(--text-color);
+  }
+  
+  .subscribe-button {
+    
+    background-color: var(--white-color);
+    color: var(--black-color);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 14px 16px 12px;
+    font-size: 16px;
+    line-height: 1.125em;
+    font-weight: 700;
+    transition: transform 0.3s ease;
+
+  }
+  .subscribe-button:hover{
+    transform: translateY(-5px);
+  }
+  .hero-content {
+    color: white;
+    max-width: 600px;
+    z-index: 3; 
+  }
+  
+  .cat-date {
+    display: flex;
+    gap: 0.75rem;
+    color: #ccc;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .category {
+    background: var(--white-color);
+    color: var(--black-color);
+    border-radius: 40px;
+    padding: 10px 14px 8px;
+    font-size: 16px;
+    line-height: 1.125em;
+    font-weight: 600;
+  }
+  
+  .date {
+    color: var(--white-color);
+    font-weight: bold;
+  }
+  
+  .hero-heading h2 {
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.192em;
+  }
+  
+  .hero-text {
+    margin-top: 1rem;
+    letter-spacing: 1px;
+    color: var(--text-color);
+    font-size: 17px;
+  }
+  
+  /* Dots for Slide Indicator */
+  .dots {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    z-index: 10;
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--grey-color);
+    border: none;
+    cursor: pointer;
+    
+  }
+  
+  .dot.active {
+    background-color: white;
+  }
+  
+  /* Overlay for Text Readability */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1; /* Lower than content */
+  }
+  
+
+  @media(max-width:991px){
+    .menu-icon{
+      display: block;
+      color: var(--white-color);
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .navbar-content{
+      justify-content: space-between;
+    }
+    .navbar-home-material{
+      display: none;
+    }
+    .navbar-home-material.nav-active{
+      display: block;
+      width: 100%;
+      position: absolute;
+      margin-left: 0;
+      flex-direction: column;
+      top: 90px;
+      background-color: var(--white-color);
+    }
+    .navbar-home-material.nav-active .navbar-links ul{
+      flex-direction: column;
+      gap: 0;
+      text-align: center;
+    }
+    .navbar-home-material.nav-active .navbar-links li{
+      color: var(--black-color);
+      padding: 1.5rem 0;
+    }
+
+    .navbar-home-material.nav-active .subscribe-button {
+      display: none;
+  
+    }
+  }
+  

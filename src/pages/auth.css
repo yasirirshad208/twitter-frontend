@@ -1,0 +1,127 @@
+.auth-page-wrapper{
+    justify-content: center;
+    align-items: center;
+    padding-top: 66px;
+    padding-bottom: 120px;
+    display: flex;
+
+}
+.auth-card{
+    max-width: 570px;
+    background-color: #f6f6f6;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 69px 76px;
+}
+.auth-title{
+    color: var(--black-color);
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.294em;
+    margin-bottom: 12px;
+}
+.auth-para{
+    font-size: 16px;
+    line-height: 1.75em;
+    margin-bottom: 32px;
+    color: var(--grey-color);
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
+.auth-input{
+    min-height: 54px;
+    border: 1px solid var(--text-color);
+    background-color: var(--white-color);
+    color: #090909;
+    border-radius: 100px;
+    margin-bottom: 0;
+    padding: 20px 24px 16px;
+    font-size: 16px;
+    line-height: 1.125em;
+    transition: color .3s, border-color .3s;
+    margin-bottom: 0.75rem;
+}
+.auth-btn{
+    border: 1px solid var(--black-color);
+    background-color: var(--black-color);
+    color: var(--white-color);
+    text-align: center;
+    transform-style: preserve-3d;
+    border-radius: 76px;
+    justify-content: center;
+    padding: 16px 26px 14px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.125em;
+    text-decoration: none;
+    transition: border-color .3s, background-color .3s, transform .3s, color .3s;
+    margin-top: 1rem;
+    cursor: pointer;
+
+}
+.dont-account{
+    margin-top: 10px;
+    cursor: pointer;
+    color: var(--grey-color);
+}
+.forgot-password-link{
+    text-align: left;
+    padding-left: 10px;
+    cursor: pointer;
+    color: var(--grey-color);
+}
+.forgot-password-link:hover{
+    text-decoration: underline;
+}
+.error-message{
+    color: red;
+}
+.success-message{
+    color: green;
+}
+@media screen and (max-width: 991px) {
+    .auth-page-wrapper {
+        padding-top: 60px;
+        padding-bottom: 100px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .auth-page-wrapper {
+        min-height: 60vh;
+        padding-top: 50px;
+        padding-bottom: 80px;
+    }
+    .auth-card{
+        max-width: 500px;
+        padding: 59px 32px;
+    }
+    .auth-title{
+        font-size: 30px;
+    }
+    .auth-para{
+        font-size: 14px;
+    }
+    .auth-input{
+        min-height: 50px;
+        padding: 16px 20px 13px;
+        font-size: 14px;
+    }
+    .auth-btn{
+        padding: 14px 22px 12px;
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 479px) {
+    .auth-page-wrapper {
+        padding-top: 40px;
+        padding-bottom: 70px;
+    }
+    .auth-card{
+        padding: 50px 24px;
+    }
+}
