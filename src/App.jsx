@@ -14,6 +14,7 @@ import UpdateTopCategory from './pages/UpdateTopCategory';
 import SuggestedCategories from './pages/SuggestedCategories';
 import AddSuggestedCategory from './pages/AddSuggestedCategory';
 import UpdateSuggestedArticle from './pages/UpdateSuggestedArticle';
+import TrendingArticles from './pages/TrendingArticles';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/admin/suggested-articles" element={<SuggestedCategories />} />
         <Route path="/admin/add/suggested-article" element={<AddSuggestedCategory />} />
         <Route path="/admin/update/suggested-article" element={<UpdateSuggestedArticle />} />
+        <Route path="/trending/articles" element={<TrendingArticles />} />
       </Routes>
     </Router>
   );
