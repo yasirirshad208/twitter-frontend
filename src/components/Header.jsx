@@ -63,7 +63,7 @@ const Header = () => {
                     <li>Home</li>
                     <li>About</li>
                     <li>Contact</li>
-                    <li>News</li>
+                    <li onClick={()=>navigate('/news')}>News</li>
                     <li onClick={()=>navigate('/admin/users')}>Admin</li>
                   </ul>
                 </nav>

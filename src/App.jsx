@@ -26,7 +26,7 @@ function App() {
         <Route path="/forgot-password" element={<Forgot />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        {/* <Route path="/news" element={<News />} /> */}
+        <Route path="/news" element={<News />} />
         <Route path="/admin/users" element={<Users />} />
         <Route path="/admin/top-articles" element={<TopCategory />} />
         <Route path="/admin/top-form" element={<Form />} />
