@@ -9,11 +9,18 @@ const Categories = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data: categories, loading, error } = useSelector((state) => state.categories);
+  const {
+    data: categories,
+    loading,
+    error,
+  } = useSelector((state) => state.categories);
 
   useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+    // Dispatch fetchCategories only if the categories data is empty
+    if (!categories || categories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, categories]);
 
   const truncateText = (text) => {
     const words = text.split(" ");
@@ -33,76 +40,103 @@ const Categories = () => {
 
   return (
     <>
-      <section className="categories container mx-auto">
+      <section className="categories custom-container">
         <div className="categories-heading">
           <h2>Article Categories</h2>
-          <button>Browse all articles</button>
+          {/* <button>Browse all articles</button> */}
         </div>
-        <div className="categories-row flex-wrap">
+        <div className="flex lg:gap-6 md:gap-4 gap-6 md:flex-row flex-col">
           {categories.map((category, index) => (
             <div
-              className="category-card flex-1 "
               key={index}
-              onClick={() => navigate(`/news?trend=${category.trend.replace("#", "")}`)}
+              className={
+                `group relative overflow-hidden rounded-[20px] cursor-pointer w-full h-[420px]`
+                //    ${
+                //   index === 0 ? "w-full md:h-[440px] h-[420px]" : "md:w-[calc(50%-0.75rem)] w-full h-[420px]"
+                // } `
+              }
+              onClick={() =>
+                navigate(`/news?trend=${category.trend.replace("#", "")}`)
+              }
             >
-              <div className="category-div">
-                <div
-                  className="category-bg"
-                  style={{ backgroundImage: `url(${category.media_url})` }}
+              {/* Zooming Background Image */}
+              <div
+                className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                style={{
+                  backgroundImage: `url('${category.media_url}')`,
+                }}
+              ></div>
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+              {/* Adventure Label */}
+              <div className="bg-white w-[2.5rem] h-[2.5rem] flex justify-center items-center rounded-[24px] absolute top-[24px] right-[24px] z-20 font-semibold">
+                <FaArrowRightLong className="arrow-sign" />
+              </div>
+
+              {/* Heading Section Overlaid on Image */}
+              <div
+                className={`absolute bottom-[24px] px-[24px] z-30 text-white w-full `}
+              >
+                <h2
+                  className={`font-bold text-[30px] drop-shadow-lg mb-2 `}
                 >
-                  <div className="category-overlay"></div>
-                </div>
-                <div className="arrow">
-                  <FaArrowRightLong className="arrow-sign" />
-                </div>
-                <h2 className="category-inner-heading">
                   {category.trend.replace("#", "")}
                 </h2>
-                <p className="category-text">{truncateText(category.text)}</p>
+                <p className="text-gainsboro" style={{ letterSpacing: "1px" }}>
+                  {truncateText(category.text)}
+                </p>
               </div>
             </div>
           ))}
         </div>
       </section>
-      <section className="popular-now container mx-auto">
-        <div className="popular-heading">
-          <div>
-            <h4 className="heading-h4">Popular Now</h4>
-          </div>
-          <div className="heading-line"></div>
-        </div>
 
-        <div className="popular-row">
-          <div className="popular-item">
-            <div className="item-category">
-              Travel <div className="item-dot"></div> <span>2 Nov 2024</span>
-            </div>
+      <section className="popular-now custom-container">
 
-            <h4 className="heading-h4">
-              Unveiling hidden gems: Exploring off-the-beaten-path destinations
-            </h4>
-          </div>
+<div className="text-[24px] font-[700] leading-[1.5em] mb-8">Latest Articles</div>
 
-          <div className="popular-item item-side-borders">
-            <div className="item-category">
-              Travel <div className="item-dot"></div> <span>2 Nov 2024</span>
-            </div>
+        <div className="flex flex-col md:flex-row">
+                
 
-            <h4 className="heading-h4">
-              Unveiling hidden gems: Exploring off-the-beaten-path destinations
-            </h4>
-          </div>
-
-          <div className="popular-item">
-            <div className="item-category">
-              Travel <div className="item-dot"></div> <span>2 Nov 2024</span>
-            </div>
-
-            <h4 className="heading-h4">
-              Unveiling hidden gems: Exploring off-the-beaten-path destinations
-            </h4>
-          </div>
-        </div>
+                <div className="group cursor-pointer md:flex ">
+                  <div>
+                  <div className="text-[#787878] mb-4 group-hover:translate-x-4 transition-transform duration-500 font-[500]">
+                    Sep 2, 2024
+                  </div>
+                  <h4 className="leading-[1.34em] text-[rgba(9,9,9)]/85 font-[700] group-hover:translate-x-4 transition-transform duration-500 hover:text-[#787878]">
+                    Unveiling hidden gems: Exploring off-the-beaten-path destinations
+                  </h4>
+                  </div>
+                  <div className="my-[32px] h-[1px] w-full bg-[gainsboro] block md:hidden"></div>
+                  <div className="mx-[32px] w-[1px] h-full bg-[gainsboro] hidden md:block"></div>
+                </div>
+                <div className="group cursor-pointer md:flex ">
+                  <div>
+                  <div className="text-[#787878] mb-4 group-hover:translate-x-4 transition-transform duration-500 font-[500]">
+                    Sep 2, 2024
+                  </div>
+                  <h4 className="leading-[1.34em] text-[rgba(9,9,9)]/85 font-[700] group-hover:translate-x-4 transition-transform duration-500 hover:text-[#787878]">
+                    Unveiling hidden gems: Exploring off-the-beaten-path destinations
+                  </h4>
+                  </div>
+                  <div className="my-[32px] h-[1px] w-full bg-[gainsboro] block md:hidden"></div>
+                  <div className="mx-[32px] w-[1px] h-full bg-[gainsboro] hidden md:block"></div>
+                </div>
+                <div className="group cursor-pointer md:flex ">
+                  <div>
+                  <div className="text-[#787878] mb-4 group-hover:translate-x-4 transition-transform duration-500 font-[500]">
+                    Sep 2, 2024
+                  </div>
+                  <h4 className="leading-[1.34em] text-[rgba(9,9,9)]/85 font-[700] group-hover:translate-x-4 transition-transform duration-500 hover:text-[#787878]">
+                    Unveiling hidden gems: Exploring off-the-beaten-path destinations
+                  </h4>
+                  </div>
+                  <div className="my-[32px] h-[1px] w-full bg-[gainsboro] block md:hidden"></div>
+                  <div className="mx-[32px] w-[1px] h-full bg-[gainsboro] hidden md:block"></div>
+                </div>
+              </div>
       </section>
     </>
   );

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import "./Header.css";
 import { RiMenu3Fill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../context/authContext';
 
 const Header = () => {
+ 
   const images = [
     {
       src: './images/mountains.jpg',
@@ -31,6 +33,7 @@ const Header = () => {
   const navigate = useNavigate()
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isNavActive, setIsNavActive] = useState(false);
+  const { isLoggedIn, setIsLoggedIn, setIsAdmin, isAdmin } = useContext(AuthContext);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -46,13 +49,19 @@ const Header = () => {
     setIsNavActive(!isNavActive);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    setIsLoggedIn(false); 
+    setIsAdmin(false);
+  };
+
   return (
     <div>
       <div
         className="hero-section"
         style={{ backgroundImage: `url(${currentImage.src})` }}
       >
-        <div className="page-wrapper hero-styling">
+        <div className="custom-container hero-styling">
           {/* Navbar */}
           <div className="navbar-home">
             <div className="navbar-content">
@@ -64,10 +73,18 @@ const Header = () => {
                     <li>About</li>
                     <li>Contact</li>
                     <li onClick={()=>navigate('/news')}>News</li>
+                    {isAdmin&&
+                    
                     <li onClick={()=>navigate('/admin/users')}>Admin</li>
+                    }
                   </ul>
                 </nav>
+                {isLoggedIn ? (
+                <button className="subscribe-button" onClick={handleLogout}>Logout</button>
+              ) : (
                 <button className="subscribe-button" onClick={()=>navigate('/login')}>Login</button>
+              )}
+                
               </div>
               <div className="menu-icon" onClick={handleMenuClick}>
                 <RiMenu3Fill />

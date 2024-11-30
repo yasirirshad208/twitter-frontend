@@ -34,7 +34,6 @@ margin-top: 6rem;
     gap: 2rem;
 }
 .category-card{
-    height: 400px;
     overflow: hidden;
     border-radius: 20px;
 }
@@ -166,7 +165,7 @@ margin-top: 6rem;
         margin-left: 2rem;
       }
   }
-  @media(max-width:767px){
+  @media(max-width:768px){
     .categories{
         padding: 0 4rem;
     }

@@ -10,12 +10,16 @@ const Users = () => {
   const { state, dispatch } = useUserContext(); 
   const [users, setUsers] = useState(state.users); 
 
-
+const token = localStorage.getItem('token')
   useEffect(() => {
     const fetchUsers = async () => {
       dispatch({ type: 'FETCH_USERS_REQUEST' });
       try {
-        const response = await axios.get('http://localhost:5000/api/user/get/all');
+        const response = await axios.get('http://localhost:5000/api/user/get/all',{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         dispatch({ type: 'FETCH_USERS_SUCCESS', payload: response.data.data }); 
         setUsers(response.data.data); 
       } catch (error) {
@@ -33,10 +37,14 @@ const Users = () => {
     if (!isConfirmed) {
       return; 
     }
-  
+  let tok = localStorage.getItem('token')
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/user/update/admin-status/${userId}`, 
+        `http://localhost:5000/api/user/update/admin-status/${userId}`,{
+          headers: {
+            Authorization: `Bearer ${tok}`,
+          },
+        } 
     
       );
   
@@ -50,6 +58,7 @@ const Users = () => {
       }
     } catch (error) {
       alert('Error occurred while updating admin status.');
+      console.error(error)
     }
   };
   

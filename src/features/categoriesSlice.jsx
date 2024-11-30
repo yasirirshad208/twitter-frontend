@@ -3,8 +3,13 @@ import axios from "axios";
 
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
+      const { categories } = getState(); // Access state
+      // Skip fetching if categories are already available
+      if (categories.data.length > 0) {
+        return categories.data;
+      }
       const response = await axios.get("http://localhost:5000/api/twitter/trending/categories");
       return response.data.data;
     } catch (error) {
@@ -16,11 +21,11 @@ export const fetchCategories = createAsyncThunk(
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: {
-    data: [],
-    loading: false,
-    error: null,
+    data: [], // Holds the fetched data
+    loading: false, // Loading state
+    error: null, // Error message
   },
-  reducers: {},
+  reducers: {}, // Optional additional reducers if needed
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {

@@ -10,6 +10,7 @@ const UpdateTopCategory = () => {
   const navigate = useNavigate();
   const location = useLocation()
 
+  const token = localStorage.getItem('token')
   // State to store form data
   const [formData, setFormData] = useState({
     topic: "",
@@ -66,6 +67,8 @@ const UpdateTopCategory = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+             
           },
         }
       );

@@ -20,6 +20,8 @@ const UpdateSuggestedArticle = () => {
   });
   const [id, setId] = useState(location.state?.id || "");
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     if (id === "") {
       navigate("/admin/suggested-articles");
@@ -82,6 +84,7 @@ const UpdateSuggestedArticle = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
           },
         }
       );

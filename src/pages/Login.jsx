@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "./auth.css";
+import AuthContext from '../context/authContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    const {setIsLoggedIn, setIsAdmin} = useContext(AuthContext)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,9 +19,11 @@ const Login = () => {
         try {
             const response = await axios.post('http://localhost:5000/api/user/login', { email, password });
             // Assuming the response contains a token or user info
-            const { token, user } = response.data;
+            const { token, data } = response.data;
             // Store the token or handle it as needed
             localStorage.setItem('token', token);
+            setIsLoggedIn(true) 
+            setIsAdmin(data.isAdmin)
             // Redirect or handle success
             navigate('/'); // Replace with the intended path after login
         } catch (err) {

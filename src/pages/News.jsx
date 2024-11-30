@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
 import { TiTick } from "react-icons/ti";
-import { FaRegHeart } from "react-icons/fa6";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { useLocation } from "react-router-dom";
+import AuthContext from "../context/authContext";
 
 const News = () => {
   const [user, setUser] = useState(true);
   const [username, setUsername] = useState("");
   const [userData, setUserData] = useState(null);
   const [userTweets, setUserTweets] = useState([]);
+  const [favourites, setfavourites] = useState([]);
   const [error, setError] = useState(null);
+  const {isLoggedIn} = useContext(AuthContext)
+  const [addedToFav, setAddedToFav] = useState(false)
 
   const location = useLocation(); // React Router location object
+
+  const token = localStorage.getItem('token')
 
   const searchApi = async (query) => {
     try {
@@ -23,9 +29,8 @@ const News = () => {
         }
       );
       setUserTweets(tweetsResponse.data.data.results);
-      console.log(tweetsResponse.data.data.results);
     } catch (error) {
-      console.error("Tweets fetch error:", error);
+      alert("Tweets fetch error:", error);
     }
   };
 
@@ -42,45 +47,115 @@ const News = () => {
 
   const handleApis = () => {
     if (user) {
-      userTweetsApi();
-      handleSearch();
+      
+      handleSearch(username);
+      userTweetsApi(username);
     } else {
       searchApi(username);
     }
   };
 
-  const handleSearch = async () => {
+  useEffect(()=>{
+    fetchFavourite()
+    
+  },[])
+
+  const handleSearch = async (user) => {
+    setAddedToFav(false)
     try {
       const userResponse = await axios.get(
         `http://localhost:5000/api/twitter/user/details`,
         {
-          params: { username },
+          params: { username:user },
         }
       );
       setUserData(userResponse.data.data);
+
+      const foundFav=favourites.find((fav)=>fav.username === userData.username)
+      if(foundFav){
+        setAddedToFav(true)
+      }
     } catch (error) {
-      console.error("User data fetch error:", error);
     }
   };
 
-  const userTweetsApi = async () => {
+  const userTweetsApi = async (user) => {
     try {
       const tweetsResponse = await axios.get(
         `http://localhost:5000/api/twitter/user/tweets`,
         {
-          params: { username },
+          params: { username:user },
         }
       );
       setUserTweets(tweetsResponse.data.data.results);
+      setUser(true)
     } catch (error) {
-      console.error("Tweets fetch error:", error);
     }
   };
 
- 
+  const addFavourite = async ()=>{
+    try {
+      const tweetsResponse = await axios.post(
+        `http://localhost:5000/api/favourite/add`,
+        {
+          name: userData.name,
+          username: userData.username,
+          bio: userData.description,
+          avatar: userData.profile_pic_url,
+          twitterId: userData.user_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      favourites.push(tweetsResponse.data.data);
+      setAddedToFav(true)
+    } catch (error) {
+      alert( error.response.data.message);
+    }
+  }
+
+  const fetchFavourite = async ()=>{
+    try {
+      const tweetsResponse = await axios.get(
+        `http://localhost:5000/api/favourite/get`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setfavourites(tweetsResponse.data.data);
+    } catch (error) {
+      alert( error.response.data.message);
+    }
+  }
+
+ const removeFavourite = async(user)=>{
+  try {
+    const tweetsResponse = await axios.delete(
+      `http://localhost:5000/api/favourite/delete/${user}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const favs = favourites.filter((fav)=>{
+      return fav.username !== user
+    })
+    setfavourites(favs);
+    // alert(tweetsResponse)
+  } catch (error) {
+    // alert( error.response.data.message);
+  }
+ }
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <>
+    <main className="custom-container px-4 py-4">
       {/* Search Bar */}
       <section className="flex w-full sm:w-[50%] mx-auto mb-8 flex-col">
         <div className="flex gap-4 pl-2 mb-2">
@@ -108,36 +183,44 @@ const News = () => {
       </section>
 
       <div className="flex relative">
-        {userData && (
+        {favourites.length !==0 && isLoggedIn && user && (
+          
           <div className="absolute left-0">
-            <h2 className="text-[20px] font-semibold mb-4">Favourites</h2>
-            <div className="flex justify-between w-[250px]">
+            <h2 className="text-[20px] font-semibold mb-8">Favourites</h2>
+            {favourites.map((fav)=>{
+            return <div className="flex justify-between w-[250px] mb-4">
               <div className="flex items-center">
-                {userData.profile_pic_url !== null && (
+                {fav.avatar !== null && (
                   <img
-                    src={userData.profile_pic_url}
+                    src={fav.avatar}
                     className="w-[40px] h-[40px] rounded-[50%]"
                     alt="User Image"
                   />
                 )}
-                <div className="ml-2">
+                <div className="ml-2 cursor-pointer" onClick={()=>{
+                  setUsername(fav.username);
+                  handleSearch(fav.username)
+                  userTweetsApi(fav.username)
+                
+                }}>
                   <h4 className="text-[15px] leading-none font-[500] mt-1">
-                    {userData.name}
+                    {fav.name}
                   </h4>
                   <span className="text-[14px] text-[#787878]">
-                    {userData.username}
+                    {fav.username}
                   </span>
                 </div>
               </div>
               <div className="mt-1">
-                <FaRegHeart className="text-[22px] cursor-pointer" />
+                <FaHeart className="text-[22px]  text-[#F33A6A] cursor-pointer hover:translate-y-[-2px] transition-transform duration-200" onClick={()=>removeFavourite(fav.username)}/>
               </div>
             </div>
+            })}
           </div>
         )}
 
         <div className="max-w-xl mx-auto">
-          {userData && (
+          {userData && user  && (
             <div className="mb-10">
               <div className="">
                 <div className="flex items-center">
@@ -160,9 +243,21 @@ const News = () => {
                       </h4>
                       <span>@{userData.username}</span>
                     </div>
-                    <div className=" mt-2 mr-8">
-                      <FaRegHeart className="text-[26px] cursor-pointer" />
+                    {
+                      isLoggedIn &&
+
+                      <div className=" mt-2 mr-8">
+                        {addedToFav ?(
+                          <FaHeart className="text-[26px] text-[#F33A6A] cursor-pointer hover:translate-y-[-2px] transition-transform duration-200" onClick={()=>{removeFavourite(userData.username); setAddedToFav(false)}}/>
+  
+
+                        ):(
+<FaRegHeart className="text-[26px] cursor-pointer hover:translate-y-[-2px] transition-transform duration-200" onClick={addFavourite}/>                        
+                        )
+
+                        }
                     </div>
+                    }
                   </div>
                 </div>
                 <div className="text-[15px] mt-4 text-[#787878]">
@@ -219,7 +314,7 @@ const News = () => {
                         {tweet.media_url !== null && (
                           <img
                             src={tweet.media_url[0]}
-                            className="mt-2 rounded-[6px] w-full h-[300px] object-cover"
+                            className="mt-2 rounded-[6px] w-full min-h-[300px] object-cover"
                           />
                         )}
                       </div>
@@ -232,6 +327,7 @@ const News = () => {
         </div>
       </div>
     </main>
+    </>
   );
 };
 

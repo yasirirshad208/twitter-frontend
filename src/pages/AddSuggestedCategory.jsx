@@ -17,6 +17,7 @@ const AddSuggestedCategory = () => {
 
   const navigate = useNavigate();
   const { isNavOpen } = useAdminContext();
+  const token = localStorage.getItem('token')
 
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
@@ -46,6 +47,7 @@ const AddSuggestedCategory = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
           },
         }
       );
