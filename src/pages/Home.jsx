@@ -3,8 +3,10 @@ import Header from "../components/Header";
 import Categories from "../components/Categories";
 import Subscribe from "../components/Subscribe";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
   const [data, setData] = useState([])
+  const navigate = useNavigate()
 
   const suggestedCategories = async()=>{
     try {
@@ -37,6 +39,7 @@ const Home = () => {
                   className={`group relative overflow-hidden rounded-[20px] cursor-pointer ${
                     index === 0 ? "w-full md:h-[440px] h-[420px]" : "md:w-[calc(50%-0.75rem)] w-full h-[420px]"
                   } `}
+                  onClick={()=>navigate(`/article?category=${d.category}`)}
                 >
                   {/* Zooming Background Image */}
                   <div

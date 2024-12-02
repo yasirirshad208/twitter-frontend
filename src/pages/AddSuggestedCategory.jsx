@@ -4,13 +4,16 @@ import AdminTopNav from "../components/AdminTopNav";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAdminContext } from "../context/AdminContext";
+import { RxCross2 } from "react-icons/rx";
 
 const AddSuggestedCategory = () => {
+  const [account, setAccount] = useState("")
   const [formData, setFormData] = useState({
     category: "",
     title: "",
     description: "",
     date: "",
+    accounts: [],
     showAtHeader: false,
     image: null,
   });
@@ -30,6 +33,36 @@ const AddSuggestedCategory = () => {
     }
   };
 
+  const handleAccountChange = (e) => {
+    setAccount(e.target.value); // Update local account state
+  };
+
+  const handleAddAccount = () => {
+    if(formData.accounts.length === 5){
+      alert("You can add maximun 5 accounts");
+      return
+    }
+    if (account.trim()) { // Check if account is not empty
+      setFormData((prevData) => ({
+        ...prevData,
+        accounts: [...prevData.accounts, account], // Add the account to the accounts array
+      }));
+      setAccount(""); // Reset the account input field
+
+      console.log(formData.accounts)
+    }
+  };
+
+ 
+  const handleRemoveAccount = (val) => {
+    const filteredAccs = formData.accounts.filter((v) => v !== val); 
+    setFormData((prevData) => ({
+      ...prevData,
+      accounts: filteredAccs,
+    }));
+  };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = new FormData();
@@ -38,6 +71,7 @@ const AddSuggestedCategory = () => {
     form.append("description", formData.description);
     form.append("date", formData.date);
     form.append("showAtHeader", formData.showAtHeader);
+    form.append("accounts", formData.accounts);
     if (formData.image) form.append("image", formData.image);
 
     try {
@@ -111,6 +145,38 @@ const AddSuggestedCategory = () => {
                 className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
                 required
               />
+            </div>
+
+            <div className="mt-6">
+              <label
+                htmlFor="accounts"
+                className="text-[14px] leading-[18px] font-[600]"
+              >
+                Accounts
+              </label>
+              <div className="mt-[8px] w-full flex items-center gap-2 h-[42px]">
+                <input
+                  type="text"
+                  id="accounts"
+                  name="accounts"
+                  value={account}
+                  onChange={handleAccountChange}
+                  className=" w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-full outline-none focus:border-blue-500"
+                  
+                />
+                <div className="bg-black text-white px-3 h-full rounded-[5px] flex items-center cursor-pointer" onClick={handleAddAccount}>Add</div>
+              </div>
+              
+              <div className="flex items-center mt-2 sm:gap-3 gap-1">
+                {formData.accounts.map((acc)=>{
+                  return <span className="text-[#000] sm:text-[14px] text-[12px] flex items-center gap-2 bg-[#D7D3BF] px-3 py-1 rounded-[14px]">
+                  {acc} <RxCross2 className="sm:text-[14px] text-[12px] cursor-pointer" onClick={()=>handleRemoveAccount(acc)}/>
+              </span>
+                })
+
+                }
+                
+              </div>
             </div>
 
             {/* Description */}

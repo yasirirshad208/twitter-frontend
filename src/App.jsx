@@ -14,6 +14,8 @@ import SuggestedCategories from './pages/SuggestedCategories';
 import AddSuggestedCategory from './pages/AddSuggestedCategory';
 import UpdateSuggestedArticle from './pages/UpdateSuggestedArticle';
 import Navbar from './components/Navbar';
+import Test from './pages/Test';
+import CategoryArticle from './pages/CategoryArticle';
 
 const AppWrapper = () => {
   const location = useLocation();
@@ -49,6 +51,8 @@ const AppWrapper = () => {
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/news" element={<News />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/article" element={<CategoryArticle />} />
       </Routes>
     </>
   );
