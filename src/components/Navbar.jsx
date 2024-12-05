@@ -30,7 +30,6 @@ const Navbar = () => {
                   <li className="!text-black" onClick={() => navigate('/')}>Home</li>
                   <li className="!text-black">About</li>
                   <li className="!text-black">Contact</li>
-                  <li className="!text-black">Tweets</li>
                   <li className="!text-black" onClick={() => navigate('/')}>News</li>
                   {isAdmin&&
                     

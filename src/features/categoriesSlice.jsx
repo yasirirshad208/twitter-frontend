@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// Thunks for API calls
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async (_, { getState, rejectWithValue }) => {
     try {
       const { categories } = getState(); // Access state
-      // Skip fetching if categories are already available
       if (categories.data.length > 0) {
         return categories.data;
       }
@@ -18,14 +18,28 @@ export const fetchCategories = createAsyncThunk(
   }
 );
 
+export const fetchSuggestedCategories = createAsyncThunk(
+  "categories/fetchSuggestedCategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/suggested-category/all");
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue("Error fetching suggested categories");
+    }
+  }
+);
+
+// Slice
 const categoriesSlice = createSlice({
   name: "categories",
   initialState: {
-    data: [], // Holds the fetched data
-    loading: false, // Loading state
-    error: null, // Error message
+    data: [],
+    suggestedData: [],
+    loading: false,
+    error: null,
   },
-  reducers: {}, // Optional additional reducers if needed
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {
@@ -37,6 +51,18 @@ const categoriesSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchSuggestedCategories.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchSuggestedCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        state.suggestedData = action.payload;
+      })
+      .addCase(fetchSuggestedCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

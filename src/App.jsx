@@ -16,6 +16,7 @@ import UpdateSuggestedArticle from './pages/UpdateSuggestedArticle';
 import Navbar from './components/Navbar';
 import Test from './pages/Test';
 import CategoryArticle from './pages/CategoryArticle';
+import Categories from './pages/Categories';
 
 const AppWrapper = () => {
   const location = useLocation();
@@ -53,6 +54,7 @@ const AppWrapper = () => {
         <Route path="/news" element={<News />} />
         <Route path="/test" element={<Test />} />
         <Route path="/article" element={<CategoryArticle />} />
+        <Route path="/categories" element={<Categories />} />
       </Routes>
     </>
   );

@@ -21,6 +21,7 @@ const News = () => {
   const token = localStorage.getItem('token')
 
   const searchApi = async (query) => {
+    setUserData(null)
     try {
       const tweetsResponse = await axios.get(
         `http://localhost:5000/api/twitter/search`,
@@ -71,7 +72,8 @@ const News = () => {
       );
       setUserData(userResponse.data.data);
 
-      const foundFav=favourites.find((fav)=>fav.username === userData.username)
+      const foundFav=favourites.find((fav)=>fav.username === userResponse.data.data.username)
+
       if(foundFav){
         setAddedToFav(true)
       }
@@ -89,6 +91,8 @@ const News = () => {
       );
       setUserTweets(tweetsResponse.data.data.results);
       setUser(true)
+
+       
     } catch (error) {
     }
   };
@@ -113,6 +117,7 @@ const News = () => {
       favourites.push(tweetsResponse.data.data);
       setAddedToFav(true)
     } catch (error) {
+     
       alert( error.response.data.message);
     }
   }
@@ -127,10 +132,14 @@ const News = () => {
           },
         }
       );
+     
+
       setfavourites(tweetsResponse.data.data);
     } catch (error) {
-      alert( error.response.data.message);
-    }
+      if(error.response.status !== 404){
+        alert( error.response.data.message);
+      }
+      }
   }
 
  const removeFavourite = async(user)=>{
@@ -146,6 +155,9 @@ const News = () => {
     const favs = favourites.filter((fav)=>{
       return fav.username !== user
     })
+    if(userData.username === user){
+      setAddedToFav(false)
+    }
     setfavourites(favs);
     // alert(tweetsResponse)
   } catch (error) {
