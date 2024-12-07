@@ -38,8 +38,8 @@ const AddSuggestedCategory = () => {
   };
 
   const handleAddAccount = () => {
-    if(formData.accounts.length === 5){
-      alert("You can add maximun 5 accounts");
+    if(formData.accounts.length === 20){
+      alert("You can add maximun 20 accounts");
       return
     }
     if (account.trim()) { // Check if account is not empty
@@ -167,7 +167,7 @@ const AddSuggestedCategory = () => {
                 <div className="bg-black text-white px-3 h-full rounded-[5px] flex items-center cursor-pointer" onClick={handleAddAccount}>Add</div>
               </div>
               
-              <div className="flex items-center mt-2 sm:gap-3 gap-1">
+              <div className="flex items-center mt-2 sm:gap-3 gap-1 flex-wrap">
                 {formData.accounts.map((acc)=>{
                   return <span className="text-[#000] sm:text-[14px] text-[12px] flex items-center gap-2 bg-[#D7D3BF] px-3 py-1 rounded-[14px]">
                   {acc} <RxCross2 className="sm:text-[14px] text-[12px] cursor-pointer" onClick={()=>handleRemoveAccount(acc)}/>

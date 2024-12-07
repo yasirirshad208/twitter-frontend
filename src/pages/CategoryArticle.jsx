@@ -53,10 +53,10 @@ const CategoryArticle = () => {
         </section>
       ) : (
         <section>
-          <div className="custom-container">
+          <div className="max-w-xl mx-auto">
             {images.length !== 0 && (
               <div className="w-full">
-                {images.slice(0, 1).map((img, index) => (
+                {images.slice(0, 5).map((img, index) => (
                   <div key={index}>
                     <img
                       src={img}

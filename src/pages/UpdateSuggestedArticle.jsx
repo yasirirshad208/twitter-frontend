@@ -4,8 +4,10 @@ import AdminNav from "../components/AdminNav";
 import AdminTopNav from "../components/AdminTopNav";
 import { useAdminContext } from "../context/AdminContext";
 import axios from "axios";
+import { RxCross2 } from "react-icons/rx";
 
 const UpdateSuggestedArticle = () => {
+  const [account, setAccount] = useState("")
   const { isNavOpen } = useAdminContext();
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,6 +17,7 @@ const UpdateSuggestedArticle = () => {
     title: "",
     description: "",
     date: "",
+    accounts: [],
     showAtHeader: false,
     image: null,
   });
@@ -53,6 +56,35 @@ const UpdateSuggestedArticle = () => {
 }, [id, navigate]);
 
 
+const handleAccountChange = (e) => {
+  setAccount(e.target.value); // Update local account state
+};
+
+const handleAddAccount = () => {
+  if(formData.accounts.length === 20){
+    alert("You can add maximun 20 accounts");
+    return
+  }
+  if (account.trim()) { // Check if account is not empty
+    setFormData((prevData) => ({
+      ...prevData,
+      accounts: [...prevData.accounts, account], // Add the account to the accounts array
+    }));
+    setAccount(""); // Reset the account input field
+
+    console.log(formData.accounts)
+  }
+};
+
+const handleRemoveAccount = (val) => {
+  const filteredAccs = formData.accounts.filter((v) => v !== val); 
+  setFormData((prevData) => ({
+    ...prevData,
+    accounts: filteredAccs,
+  }));
+};
+
+
   // Handle form inputs
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
@@ -75,6 +107,7 @@ const UpdateSuggestedArticle = () => {
     form.append("description", formData.description);
     form.append("date", formData.date);
     form.append("showAtHeader", formData.showAtHeader);
+    form.append("accounts", formData.accounts);
     if (formData.image) form.append("image", formData.image);
 
     try {
@@ -127,6 +160,38 @@ const UpdateSuggestedArticle = () => {
                   onChange={handleChange}
                   className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
                 />
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <label
+                htmlFor="accounts"
+                className="text-[14px] leading-[18px] font-[600]"
+              >
+                Accounts
+              </label>
+              <div className="mt-[8px] w-full flex items-center gap-2 h-[42px]">
+                <input
+                  type="text"
+                  id="accounts"
+                  name="accounts"
+                  value={account}
+                  onChange={handleAccountChange}
+                  className=" w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-full outline-none focus:border-blue-500"
+                  
+                />
+                <div className="bg-black text-white px-3 h-full rounded-[5px] flex items-center cursor-pointer" onClick={handleAddAccount}>Add</div>
+              </div>
+              
+              <div className="flex items-center mt-2 sm:gap-3 gap-1 flex-wrap">
+                {formData.accounts.map((acc)=>{
+                  return <span className="text-[#000] sm:text-[14px] text-[12px] flex items-center gap-2 bg-[#D7D3BF] px-3 py-1 rounded-[14px]">
+                  {acc} <RxCross2 className="sm:text-[14px] text-[12px] cursor-pointer" onClick={()=>handleRemoveAccount(acc)}/>
+              </span>
+                })
+
+                }
+                
               </div>
             </div>
 

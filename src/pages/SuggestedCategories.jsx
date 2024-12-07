@@ -12,6 +12,8 @@ const SuggestedCategories = () => {
   const { isNavOpen } = useAdminContext();
   const navigate = useNavigate();
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
     const fetchNewsCategories = async () => {
       try {
@@ -28,6 +30,31 @@ const SuggestedCategories = () => {
 
     fetchNewsCategories();
   }, []);
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`http://localhost:5000/api/suggested-category/delete/${id}`,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setCategories((prevCategories) =>
+        prevCategories.filter((category) => category._id !== id)
+      );
+      alert("Category deleted successfully.");
+    } catch (err) {
+      console.error(err.response)
+      alert("Failed to delete the category. Please try again.");
+    }
+  };
 
   return (
     <div className="relative">
@@ -77,6 +104,7 @@ const SuggestedCategories = () => {
                 <div className="flex-1 px-3">ACCOUNTS</div>
                 <div className="flex-1 px-3">IMAGE</div>
                 <div className="flex-1 px-3">UPDATE</div>
+                <div className="flex-1 px-3">DELETE</div>
               </div>
 
               {categories.map((category, index) => (
@@ -99,13 +127,10 @@ const SuggestedCategories = () => {
                     {category.showAtHeader ? "Yes" : "No"}
                   </div>
                   <div className="flex-1 px-3 flex flex-wrap gap-1">
-                    {category.accounts.map((acc)=>{
-                      return <span>
-                        {acc},
-                      </span>
-                    })}
+                    {category.accounts.map((acc) => (
+                      <span key={acc}>{acc}, </span>
+                    ))}
                   </div>
-
                   <div className="flex-1 px-3">
                     <img
                       src={"http://localhost:5000/" + category.image}
@@ -123,6 +148,14 @@ const SuggestedCategories = () => {
                       }
                     >
                       Update
+                    </button>
+                  </div>
+                  <div className="flex-1 px-3">
+                    <button
+                      className="px-2 py-1 bg-red-500 text-white rounded"
+                      onClick={() => handleDelete(category._id)}
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>
