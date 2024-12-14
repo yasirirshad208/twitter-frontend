@@ -85,7 +85,7 @@ const UpdateTopCategory = () => {
       <AdminNav />
       <AdminTopNav />
       <div
-        className="px-[12px] sm:px-[50px] h-full py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
+        className="px-[12px] sm:px-[50px]py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
         style={{
           left: isNavOpen ? "220px" : "0px",
           width: isNavOpen ? "calc(100% - 220px)" : "100%",

@@ -13,6 +13,7 @@ const AddSuggestedCategory = () => {
     title: "",
     description: "",
     date: "",
+    chatgptInstructions: "Write a combined article of 2000 words based on these tweets",
     accounts: [],
     showAtHeader: false,
     image: null,
@@ -72,6 +73,7 @@ const AddSuggestedCategory = () => {
     form.append("date", formData.date);
     form.append("showAtHeader", formData.showAtHeader);
     form.append("accounts", formData.accounts);
+    form.append("chatgptInstructions", formData.chatgptInstructions);
     if (formData.image) form.append("image", formData.image);
 
     try {
@@ -98,7 +100,7 @@ const AddSuggestedCategory = () => {
       <AdminNav />
       <AdminTopNav />
       <div
-        className="px-[12px] sm:px-[50px] h-full py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
+        className="px-[12px] sm:px-[50px]py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
         style={{
             left: isNavOpen ? "220px" : "0px",
             width: isNavOpen ? "calc(100% - 220px)" : "100%",
@@ -177,6 +179,24 @@ const AddSuggestedCategory = () => {
                 }
                 
               </div>
+            </div>
+
+            <div className="mt-6">
+              <label
+                htmlFor="chatgptInstructions"
+                className="text-[14px] leading-[18px] font-[600]"
+              >
+                Chatgpt Instructions
+              </label>
+              <input
+                type="text"
+                id="chatgptInstructions"
+                name="chatgptInstructions"
+                value={formData.chatgptInstructions}
+                onChange={handleChange}
+                className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
+                required
+              />
             </div>
 
             {/* Description */}

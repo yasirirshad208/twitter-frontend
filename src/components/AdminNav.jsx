@@ -12,7 +12,7 @@ const AdminNav = () => {
     const navigate = useNavigate()
 
   return (
-    <div className={`h-[100vh] relative w-[220px] border-r border-r-[#ccc] px-4 transition-all duration-300`}
+    <div className={`h-[100vh] fixed w-[220px] border-r border-r-[#ccc] px-4 transition-all duration-300`}
     style={{
       left: isNavOpen ? '0' : '-220px',
     }}>

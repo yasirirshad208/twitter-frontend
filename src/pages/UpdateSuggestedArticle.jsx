@@ -17,6 +17,8 @@ const UpdateSuggestedArticle = () => {
     title: "",
     description: "",
     date: "",
+    category:"",
+    chatgptInstructions: "",
     accounts: [],
     showAtHeader: false,
     image: null,
@@ -103,11 +105,13 @@ const handleRemoveAccount = (val) => {
     if (!id) return;
 
     const form = new FormData();
+    form.append("category", formData.category);
     form.append("title", formData.title);
     form.append("description", formData.description);
     form.append("date", formData.date);
     form.append("showAtHeader", formData.showAtHeader);
     form.append("accounts", formData.accounts);
+    form.append("chatgptInstructions", formData.chatgptInstructions);
     if (formData.image) form.append("image", formData.image);
 
     try {
@@ -134,7 +138,7 @@ const handleRemoveAccount = (val) => {
       <AdminNav />
       <AdminTopNav />
       <div
-        className="px-[12px] sm:px-[50px] h-full py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
+        className="px-[12px] sm:px-[50px]py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
         style={{
           left: isNavOpen ? "220px" : "0px",
           width: isNavOpen ? "calc(100% - 220px)" : "100%",
@@ -144,13 +148,29 @@ const handleRemoveAccount = (val) => {
           <h2 className="text-[18px] font-[600]">Update Suggested Article</h2>
           <form className="mt-[35px]" onSubmit={handleSubmit}>
             {/* Title */}
-            <div className="flex items-center sm:gap-4 gap-2">
-              <div className="flex-1">
+
+            <div >
+                <label
+                  htmlFor="category"
+                  className="text-[14px] leading-[18px] font-[600]"
+                >
+                  Category
+                </label>
+                <input
+                  type="text"
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
+                />
+              </div>
+              <div className="mt-6">
                 <label
                   htmlFor="title"
                   className="text-[14px] leading-[18px] font-[600]"
                 >
-                  Article Title
+                  Title
                 </label>
                 <input
                   type="text"
@@ -161,7 +181,23 @@ const handleRemoveAccount = (val) => {
                   className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
                 />
               </div>
-            </div>
+
+              <div className="mt-6">
+                <label
+                  htmlFor="chatgptInstructions"
+                  className="text-[14px] leading-[18px] font-[600]"
+                >
+                  Chatgpt Instructions
+                </label>
+                <input
+                  type="text"
+                  id="chatgptInstructions"
+                  name="chatgptInstructions"
+                  value={formData.chatgptInstructions}
+                  onChange={handleChange}
+                  className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
+                />
+              </div>
 
             <div className="mt-6">
               <label

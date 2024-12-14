@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import "./Header.css";
 import { RiMenu3Fill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/authContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSuggestedCategories } from '../features/categoriesSlice';
 
 const Header = () => {
  
@@ -34,6 +36,18 @@ const Header = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isNavActive, setIsNavActive] = useState(false);
   const { isLoggedIn, setIsLoggedIn, setIsAdmin, isAdmin } = useContext(AuthContext);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null); // Reference to detect outside clicks
+
+
+  const dispatch = useDispatch();
+  const { suggestedData, loading, error } = useSelector((state) => state.categories);
+
+  useEffect(() => {
+    dispatch(fetchSuggestedCategories());
+  }, [dispatch]);
+
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -55,6 +69,28 @@ const Header = () => {
     setIsAdmin(false);
   };
 
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleOutsideClick = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isDropdownOpen]);
+
   return (
     <div>
       <div
@@ -73,6 +109,41 @@ const Header = () => {
                     <li>About</li>
                     <li>Contact</li>
                     <li onClick={()=>navigate('/news')}>News</li>
+                    <li className="relative " ref={dropdownRef}>
+  <div className="cursor-pointer" onClick={toggleDropdown}>
+    Categories
+  </div>
+  {isDropdownOpen && (
+  <ul
+    className="absolute top-full !left-1/2 transform !-translate-x-1/2 !bg-white !shadow-lg z-10 mt-4 flex flex-col rounded-lg !gap-4 animate-dropdown opacity-0 scale-95"
+    style={{ 
+      animation: isDropdownOpen
+        ? "dropdown-appearance 0.3s ease-in-out forwards"
+        : "none",
+      maxHeight: "23   0px", // Adjust height to fit 5 items
+      overflowY: suggestedData.length > 4 ? "auto" : "visible", // Enable scrollbar only for more than 5 items
+      scrollbarWidth: "thin", // Thin scrollbar for Firefox
+      scrollbarColor: "grey transparent", // Grey scrollbar for Firefox
+    }}
+  >
+     <li className='px-4 py-2 hover:bg-gray-200 cursor-pointer whitespace-nowrap !text-black !text-[15px] rounded-t-lg' onClick={()=>navigate(`/categories`)}>All</li>
+    {suggestedData.map((cat, index) => (
+      <li
+        key={cat._id}
+        className={`px-4 py-2 hover:bg-gray-200 cursor-pointer whitespace-nowrap !text-black !text-[15px] 
+          ${index === suggestedData.length - 1 ? 'rounded-b-lg' : ''}`}
+        onClick={() => {
+          setIsDropdownOpen(false);
+          navigate(`/article?category=${cat.category}`);
+        }}
+      >
+        {cat.category}
+      </li>
+    ))}
+  </ul>
+)}
+
+</li>
                     {isAdmin&&
                     
                     <li onClick={()=>navigate('/admin/users')}>Admin</li>
