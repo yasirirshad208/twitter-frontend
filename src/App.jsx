@@ -8,7 +8,7 @@ import VerifyOtp from './pages/VerifyOtp';
 import ResetPassword from './pages/ResetPassword';
 import News from './pages/News';
 import Users from './pages/Users';
-import TopCategory from './pages/TopCategory';
+import TopCategory from './pages/Category';
 import UpdateTopCategory from './pages/UpdateTopCategory';
 import SuggestedCategories from './pages/SuggestedCategories';
 import AddSuggestedCategory from './pages/AddSuggestedCategory';
@@ -17,6 +17,11 @@ import Navbar from './components/Navbar';
 import Test from './pages/Test';
 import CategoryArticle from './pages/CategoryArticle';
 import Categories from './pages/Categories';
+import AddCategory from './pages/AddCategory';
+import SubCategory from './pages/SubCategory';
+import AddSubCategory from './pages/AddSubCategory';
+import UpdateSubCategory from './pages/UpdateSubCategory';
+import UpdateCategory from './pages/UpdateCategory';
 
 const AppWrapper = () => {
   const location = useLocation();
@@ -25,11 +30,16 @@ const AppWrapper = () => {
   const excludedRoutes = [
     "/",
     "/admin/users",
-    "/admin/top-articles",
+    "/admin/categories",
     "/admin/update/top-article",
     "/admin/suggested-articles",
     "/admin/add/suggested-article",
-    "/admin/update/suggested-article"
+    "/admin/update/suggested-article",
+    "/admin/add/category",
+    "/admin/sub-categories",
+    "/admin/add/sub-category",
+    "/admin/update/sub-category",
+     "/admin/update/`category"
   ];
 
   // Determine whether to show the Navbar
@@ -41,7 +51,12 @@ const AppWrapper = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin/users" element={<Users />} />
-        <Route path="/admin/top-articles" element={<TopCategory />} />
+        <Route path="/admin/categories" element={<TopCategory />} />
+        <Route path="/admin/sub-categories" element={<SubCategory />} />
+        <Route path="/admin/add/category" element={<AddCategory />} />
+        <Route path="/admin/update/category" element={<UpdateCategory />} />
+        <Route path="/admin/add/sub-category" element={<AddSubCategory />} />
+        <Route path="/admin/update/sub-category" element={<UpdateSubCategory />} />
         <Route path="/admin/update/top-article" element={<UpdateTopCategory />} />
         <Route path="/admin/suggested-articles" element={<SuggestedCategories />} />
         <Route path="/admin/add/suggested-article" element={<AddSuggestedCategory />} />

@@ -115,7 +115,7 @@ const SuggestedCategories = () => {
                   <div className="flex-1 px-3">{index + 1}</div>
                   <div className="flex-1 px-3">{category.title}</div>
                   <div className="flex-1 px-3">{category.description}</div>
-                  <div className="flex-1 px-3">{category.category}</div>
+                  <div className="flex-1 px-3">{category.categoryId.category}</div>
                   <div className="flex-1 px-3">
                     {new Date(category.date).toLocaleDateString("en-GB", {
                       day: "2-digit",

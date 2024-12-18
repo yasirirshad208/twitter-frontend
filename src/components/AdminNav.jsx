@@ -20,7 +20,7 @@ const AdminNav = () => {
             Twitter
         </div>
         <nav className='text-[15px] mt-7 flex flex-col gap-7 text-black'>
-            <div className='flex items-center cursor-pointer hover:text-[#787878] transion-all duration-300' onClick={()=>navigate('/admin/top-articles')}><BiCategoryAlt className='mr-2 text-[22px]' />Top Articles</div>
+            <div className='flex items-center cursor-pointer hover:text-[#787878] transion-all duration-300' onClick={()=>navigate('/admin/categories')}><BiCategoryAlt className='mr-2 text-[22px]' />Categories</div>
             <div className='flex items-center cursor-pointer hover:text-[#787878] transion-all duration-300' onClick={()=>navigate('/admin/suggested-articles')}> <RiFileList3Line  className='mr-2 text-[22px]'/>Suggested Articles</div>
             <div className='flex items-center cursor-pointer hover:text-[#787878] transion-all duration-300'><IoNewspaperOutline className='mr-2 text-[22px]'/>Popular News</div>
             <div className='flex items-center cursor-pointer hover:text-[#787878] transion-all duration-300'><MdOutlineUnsubscribe className='mr-2 text-[22px]'/>Subscriptions</div>

@@ -11,9 +11,9 @@ const AdminTopNav = () => {
     const navigate = useNavigate()
 
     useEffect(()=>{
-      if(!isAdmin){
-        navigate('/')
-      }
+      // if(!isAdmin){
+      //   navigate('/')
+      // }
     },[])
     const handleToggle = ()=>{
         updateNavStatus(!isNavOpen)

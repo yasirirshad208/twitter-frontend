@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminNav from "../components/AdminNav";
 import AdminTopNav from "../components/AdminTopNav";
 import axios from "axios";
@@ -7,13 +7,16 @@ import { useAdminContext } from "../context/AdminContext";
 import { RxCross2 } from "react-icons/rx";
 
 const AddSuggestedCategory = () => {
-  const [account, setAccount] = useState("")
+  const [account, setAccount] = useState("");
+  const [categories, setCategories] = useState([]); // To store categories
   const [formData, setFormData] = useState({
-    category: "",
+    categoryId: "",
+    subcategory: "",
     title: "",
     description: "",
     date: "",
-    chatgptInstructions: "Write a combined article of 2000 words based on these tweets",
+    chatgptInstructions:
+      "Write a combined article of 2000 words based on these tweets",
     accounts: [],
     showAtHeader: false,
     image: null,
@@ -21,7 +24,34 @@ const AddSuggestedCategory = () => {
 
   const navigate = useNavigate();
   const { isNavOpen } = useAdminContext();
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/category/all",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setCategories(response.data.categories); // Set categories state
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories(); // Call the async function
+  }, [token]);
+
+  // Handle category change and fetch subcategories
+  const handleCategoryChange = async (e) => {
+    const selectedCategory = e.target.value;
+    setFormData({ ...formData, categoryId: selectedCategory });
+
+  };
 
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
@@ -39,35 +69,33 @@ const AddSuggestedCategory = () => {
   };
 
   const handleAddAccount = () => {
-    if(formData.accounts.length === 20){
-      alert("You can add maximun 20 accounts");
-      return
+    if (formData.accounts.length === 20) {
+      alert("You can add a maximum of 20 accounts");
+      return;
     }
-    if (account.trim()) { // Check if account is not empty
+    if (account.trim()) {
       setFormData((prevData) => ({
         ...prevData,
         accounts: [...prevData.accounts, account], // Add the account to the accounts array
       }));
       setAccount(""); // Reset the account input field
-
-      console.log(formData.accounts)
     }
   };
 
- 
   const handleRemoveAccount = (val) => {
-    const filteredAccs = formData.accounts.filter((v) => v !== val); 
+    const filteredAccs = formData.accounts.filter((v) => v !== val);
     setFormData((prevData) => ({
       ...prevData,
       accounts: filteredAccs,
     }));
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = new FormData();
-    form.append("category", formData.category);
+    form.append("categoryId", formData.categoryId);
+
+    form.append("subcategory", formData.subcategory); // Include the subcategory ID
     form.append("title", formData.title);
     form.append("description", formData.description);
     form.append("date", formData.date);
@@ -83,7 +111,7 @@ const AddSuggestedCategory = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -102,9 +130,9 @@ const AddSuggestedCategory = () => {
       <div
         className="px-[12px] sm:px-[50px]py-[20px] bg-[#f8f9fb] color-[#627183] absolute top-[60px] transition-all duration-300"
         style={{
-            left: isNavOpen ? "220px" : "0px",
-            width: isNavOpen ? "calc(100% - 220px)" : "100%",
-          }}
+          left: isNavOpen ? "220px" : "0px",
+          width: isNavOpen ? "calc(100% - 220px)" : "100%",
+        }}
       >
         <div className="md:w-[70%] w-[100%] mx-auto mt-6">
           <h2 className="text-[18px] font-[600]">Add Suggested Category</h2>
@@ -113,23 +141,71 @@ const AddSuggestedCategory = () => {
             <div className="flex items-center sm:gap-4 gap-2">
               <div className="flex-1">
                 <label
-                  htmlFor="category"
+                  htmlFor="categoryId"
                   className="text-[14px] leading-[18px] font-[600]"
                 >
                   Category
                 </label>
-                <input
-                  type="text"
-                  id="category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
+                <select
+                  id="categoryId"
+                  name="categoryId"
+                  value={formData.categoryId}
+                  onChange={handleCategoryChange}
+                  className="mt-[8px] w-full text-[#33333] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
                   required
-                />
+                >
+                  <option value="">Select a Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.category}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
+            {/* Subcategory */}
+            {/* <div className="mt-6">
+              <label
+                htmlFor="subcategory"
+                className="text-[14px] leading-[18px] font-[600]"
+              >
+                Subcategory
+              </label>
+              <select
+                id="subcategory"
+                name="subcategory"
+                value={formData.subcategory}
+                onChange={handleChange}
+                className="mt-[8px] w-full text-[#33333] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
+                required
+              >
+                <option value="">Select a Subcategory</option>
+                {subcategories.map((sub) => (
+                  <option key={sub._id} value={sub._id}>
+                    {sub.subCategory}
+                  </option>
+                ))}
+              </select>
+            </div> */}
+
+            <div className="mt-6">
+              <label
+                htmlFor="title"
+                className="text-[14px] leading-[18px] font-[600]"
+              >
+                Subcategory
+              </label>
+              <input
+                type="text"
+                id="subcategory"
+                name="subcategory"
+                value={formData.subcategory}
+                onChange={handleChange}
+                className="mt-[8px] w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-[42px] outline-none focus:border-blue-500"
+                required
+              />
+            </div>
             {/* Title */}
             <div className="mt-6">
               <label
@@ -164,20 +240,27 @@ const AddSuggestedCategory = () => {
                   value={account}
                   onChange={handleAccountChange}
                   className=" w-full text-[#33333] py-[12px] px-[20px] text-[14px] leading-[20px] border border-[#e1e6f0] rounded-[5px] h-full outline-none focus:border-blue-500"
-                  
                 />
-                <div className="bg-black text-white px-3 h-full rounded-[5px] flex items-center cursor-pointer" onClick={handleAddAccount}>Add</div>
+                <div
+                  className="bg-black text-white px-3 h-full rounded-[5px] flex items-center cursor-pointer"
+                  onClick={handleAddAccount}
+                >
+                  Add
+                </div>
               </div>
-              
-              <div className="flex items-center mt-2 sm:gap-3 gap-1 flex-wrap">
-                {formData.accounts.map((acc)=>{
-                  return <span className="text-[#000] sm:text-[14px] text-[12px] flex items-center gap-2 bg-[#D7D3BF] px-3 py-1 rounded-[14px]">
-                  {acc} <RxCross2 className="sm:text-[14px] text-[12px] cursor-pointer" onClick={()=>handleRemoveAccount(acc)}/>
-              </span>
-                })
 
-                }
-                
+              <div className="flex items-center mt-2 sm:gap-3 gap-1 flex-wrap">
+                {formData.accounts.map((acc) => {
+                  return (
+                    <span className="text-[#000] sm:text-[14px] text-[12px] flex items-center gap-2 bg-[#D7D3BF] px-3 py-1 rounded-[14px]">
+                      {acc}{" "}
+                      <RxCross2
+                        className="sm:text-[14px] text-[12px] cursor-pointer"
+                        onClick={() => handleRemoveAccount(acc)}
+                      />
+                    </span>
+                  );
+                })}
               </div>
             </div>
 

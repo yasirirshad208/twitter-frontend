@@ -12,20 +12,19 @@ const CategoryArticle = () => {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const categoryFromUrl = queryParams.get("category");
+    const categoryFromUrl = queryParams.get("id");
 
     if (categoryFromUrl) {
-      testApi(categoryFromUrl.toLocaleLowerCase());
+      testApi(categoryFromUrl);
     }
   }, [location.search]);
 
-  const testApi = async (category) => {
-    console.log(category);
+  const testApi = async (id) => {
     setLoading(true);
     try {
       const url = "http://localhost:5000/api/twitter/category/article";
       const payload = {
-        category,
+        id,
       };
 
       const res = await axios.post(url, payload);
