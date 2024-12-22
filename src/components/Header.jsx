@@ -61,7 +61,8 @@ const Header = () => {
   }, [images.length]);
 
   const currentImage = images[currentIndex];
-
+console.log(suggestedData)
+console.log(allCategories)
   const handleMenuClick = () => {
     setIsNavActive(!isNavActive);
   };

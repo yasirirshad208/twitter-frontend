@@ -35,9 +35,9 @@ const Home = () => {
                       ? "w-full md:h-[440px] h-[420px]"
                       : "md:w-[calc(50%-0.75rem)] w-full h-[420px]"
                   } `}
-                  onClick={() => navigate(`/article?category=${d.category}`)}
+                  onClick={() => navigate(`/article?id=${d._id}`)}
                 >
-                  <SuggestedCategory image={d.image} date={d.date} category={d.category} title={d.title} index={index}/>
+                  <SuggestedCategory image={d.image} date={d.date} category={d.subCategory} title={d.title} index={index}/>
                 </div>
               ))}
               <div className="w-full flex justify-center mt-4">
